@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonAddTimer).setOnClickListener(i -> {
             Intent intent = new Intent(getApplicationContext(), CreateTimer.class);
-            intent.putExtra("trainingId", new int[]{0,0});
+            intent.putExtra("timerId", new int[]{0,0});
             startActivity(intent);
         });
     }

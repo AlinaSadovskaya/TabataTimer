@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.divyanshu.colorseekbar.ColorSeekBar;
 
@@ -36,6 +37,13 @@ public class CreateTimer extends AppCompatActivity {
     EditText inputCycle;
     EditText inputSet;
     EditText inputCalm;
+
+    ImageView imageView1;
+    ImageView imageView2;
+    ImageView imageView3;
+    ImageView imageView4;
+    ImageView imageView5;
+    ImageView imageView6;
 
     ColorSeekBar bar;
 
@@ -166,7 +174,12 @@ public class CreateTimer extends AppCompatActivity {
         inputCycle = findViewById(R.id.inputCycle);
         inputSet = findViewById(R.id.inputSet);
         inputCalm = findViewById(R.id.inputCalm);
-
+        imageView6 = findViewById(R.id.icon6);
+        imageView1 = findViewById(R.id.icon);
+        imageView2 = findViewById(R.id.icon2);
+        imageView3 = findViewById(R.id.icon3);
+        imageView4 = findViewById(R.id.icon4);
+        imageView5 = findViewById(R.id.icon5);
         bar = findViewById(R.id.color_seek_bar);
     }
 
