@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
@@ -11,6 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.divyanshu.colorseekbar.ColorSeekBar;
+
+import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar;
+import codes.side.andcolorpicker.model.IntegerHSLColor;
 
 public class CreateTimer extends AppCompatActivity {
 
@@ -45,9 +49,11 @@ public class CreateTimer extends AppCompatActivity {
     ImageView imageView5;
     ImageView imageView6;
 
-    ColorSeekBar bar;
+    HSLColorPickerSeekBar bar;
 
     TimerModel timerModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +129,9 @@ public class CreateTimer extends AppCompatActivity {
                 timerModel.Cycles = Integer.parseInt(inputCycle.getText().toString());
                 timerModel.Sets = Integer.parseInt(inputSet.getText().toString());
                 timerModel.RestSets = Integer.parseInt(inputCalm.getText().toString());
-                timerModel.Color = bar.getColor();
+                IntegerHSLColor ii = bar.getPickedColor();
+
+                timerModel.Color = Color.HSVToColor(new float[]{ii.getFloatH(), ii.getFloatL(), ii.getFloatS()});
                 db.timerDao().insert(timerModel);
             }
             else {
@@ -134,7 +142,8 @@ public class CreateTimer extends AppCompatActivity {
                 timerModel.Cycles = Integer.parseInt(inputCycle.getText().toString());
                 timerModel.Sets = Integer.parseInt(inputSet.getText().toString());
                 timerModel.RestSets = Integer.parseInt(inputCalm.getText().toString());
-                timerModel.Color = bar.getColor();
+                IntegerHSLColor ii = bar.getPickedColor();
+                timerModel.Color = Color.HSVToColor(new float[]{ii.getFloatH(), ii.getFloatL(), ii.getFloatS()});
                 db.timerDao().update(timerModel);
             }
             Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -151,6 +160,8 @@ public class CreateTimer extends AppCompatActivity {
         viewModel.setCycle(timerModel.Cycles);
         viewModel.setSets(timerModel.Sets);
         viewModel.setRestSets(timerModel.RestSets);
+        viewModel.setColor(timerModel.Color);
+        bar.setPickedColor(convertToIntegerHSLColor(timerModel.Color));
     }
 
     private void FindControls(){
@@ -183,6 +194,14 @@ public class CreateTimer extends AppCompatActivity {
         bar = findViewById(R.id.color_seek_bar);
     }
 
-
+    private IntegerHSLColor convertToIntegerHSLColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        IntegerHSLColor integerHSLColor = new IntegerHSLColor();
+        integerHSLColor.setFloatH(hsv[0]);
+        integerHSLColor.setFloatL(hsv[1]);
+        integerHSLColor.setFloatS(hsv[2]);
+        return integerHSLColor;
+    }
 
 }

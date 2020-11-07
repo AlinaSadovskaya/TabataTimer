@@ -11,12 +11,20 @@ public class CreateTimerViewModel extends ViewModel {
     private MutableLiveData<Integer> RestSets = new MutableLiveData<>(10);
     private MutableLiveData<Integer> Cycles = new MutableLiveData<>(2);
     private MutableLiveData<Integer> Sets = new MutableLiveData<>(1);
+    private final MutableLiveData<Integer> Color = new MutableLiveData<>(-16777216);
 
 
     public MutableLiveData<String> getName() {
         return Name;
     }
 
+    public MutableLiveData<Integer> getColor() {
+        return Color;
+    }
+
+    public void setColor(int color) {
+        Color.setValue(color);
+    }
 
     public void setPreparation(MutableLiveData<Integer> preparation) {
         Preparation = preparation;
