@@ -28,5 +28,8 @@ public interface TimerDao {
 
     @Delete
     void delete(TimerModel timerModel);
+
+    @Query("DELETE FROM timerModel")
+    void DeleteAll();
 }
 

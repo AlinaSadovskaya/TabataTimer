@@ -73,7 +73,7 @@ public class TrainingTimer extends AppCompatActivity {
                 value--;
             }
             else {
-                timePart.setText("Тренировка завершена");
+                timePart.setText(getString(R.string.Finish));
             }
             times.set(counter, value);
         };
@@ -114,7 +114,7 @@ public class TrainingTimer extends AppCompatActivity {
     }
 
     private void TimerSequence(TimerModel timerModel){
-        String[] names = {"Работа","Отдых","Подготовиться","Отдых между подходами","Финиш"};
+        String[] names = {getString(R.string.work),getString(R.string.Calm),getString(R.string.Prepair),getString(R.string.RestBTW),getString(R.string.Final)};
         parts = new ArrayList<>();
         times = new ArrayList<>();
         parts.add(names[2]);
@@ -135,7 +135,7 @@ public class TrainingTimer extends AppCompatActivity {
     }
 
     private void CreateItemSequence(TimerModel timerModel){
-        String[] names = {"Работа","Отдых","Подготовиться","Отдых между подходами","Финиш"};
+        String[] names = {getString(R.string.work),getString(R.string.Calm),getString(R.string.Prepair),getString(R.string.RestBTW),getString(R.string.Final)};
         parts = new ArrayList<>();
         times = new ArrayList<>();
         items.add(names[2] + " : " + timerModel.Preparation);
