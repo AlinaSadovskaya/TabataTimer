@@ -13,6 +13,8 @@ import java.util.List;
 
 @Dao
 public interface TimerDao {
+
+
     @Query("SELECT * FROM timerModel")
     List<TimerModel> getAll();
 

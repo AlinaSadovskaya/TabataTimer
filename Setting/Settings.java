@@ -1,4 +1,4 @@
-package com.lab2.tabatatimer;
+package com.lab2.tabatatimer.Setting;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +13,10 @@ import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.lab2.tabatatimer.App;
 import com.lab2.tabatatimer.DataBase.DataBaseHelper;
 import com.lab2.tabatatimer.Model.TimerModel;
+import com.lab2.tabatatimer.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -108,6 +110,7 @@ public class Settings extends PreferenceActivity {
             getActivity().recreate();
             return true;
         }
+
 
         private boolean onDeleteClick(Preference preference) {
             List<TimerModel> timerList = db.timerDao().getAll();

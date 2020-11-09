@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 TimerModel training = (TimerModel) parent.getItemAtPosition(position);
-                Intent intent = new Intent(getApplicationContext(),TimerPage.class);
+                Intent intent = new Intent(getApplicationContext(), TrainingTimer.class);
                 intent.putExtra("timerId", training.Id);
                 startActivity(intent);
             }
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.SettingsButton).setOnClickListener(i -> {
-            Intent Settings = new Intent(this, Settings.class);
+            Intent Settings = new Intent(this, com.lab2.tabatatimer.Setting.Settings.class);
             startActivityForResult(Settings, 1);
         });
     }
