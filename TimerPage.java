@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.lab2.tabatatimer.DataBase.DataBaseHelper;
+
 public class TimerPage extends AppCompatActivity {
 
     DataBaseHelper db;

@@ -1,10 +1,12 @@
-package com.lab2.tabatatimer;
+package com.lab2.tabatatimer.DataBase;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.lab2.tabatatimer.Model.TimerModel;
 
 import java.util.List;
 

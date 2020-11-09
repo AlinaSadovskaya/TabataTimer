@@ -1,4 +1,4 @@
-package com.lab2.tabatatimer;
+package com.lab2.tabatatimer.Model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

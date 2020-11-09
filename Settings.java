@@ -1,7 +1,5 @@
 package com.lab2.tabatatimer;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -14,6 +12,9 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.lab2.tabatatimer.DataBase.DataBaseHelper;
+import com.lab2.tabatatimer.Model.TimerModel;
 
 import java.util.List;
 import java.util.Locale;

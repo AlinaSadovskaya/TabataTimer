@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import com.lab2.tabatatimer.DataBase.DataBaseHelper;
+
 
 public class App extends Application {
     public static App instance;
