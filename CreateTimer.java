@@ -1,5 +1,6 @@
 package com.lab2.tabatatimer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.divyanshu.colorseekbar.ColorSeekBar;
 import com.lab2.tabatatimer.DataBase.DataBaseHelper;
 import com.lab2.tabatatimer.Model.TimerModel;
+import com.lab2.tabatatimer.Service.Timer;
 
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar;
 import codes.side.andcolorpicker.model.IntegerHSLColor;
@@ -116,12 +118,43 @@ public class CreateTimer extends AppCompatActivity {
 
 
         findViewById(R.id.btnCancel).setOnClickListener(i -> {
+            openQuitDialogCansel();
+        });
+
+
+
+        findViewById(R.id.submit).setOnClickListener(i -> {
+            openQuitDialogSave();
+        });
+    }
+
+    private void openQuitDialogCansel() {
+        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+                CreateTimer.this);
+        quitDialog.setTitle(getResources().getString(R.string.Cansel));
+        quitDialog.setPositiveButton(getResources().getString(R.string.Yes), (dialog, which) -> {
             Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(backIntent);
             finish();
         });
+        quitDialog.setNegativeButton(getResources().getString(R.string.No), (dialog, which) -> {
+        });
+        quitDialog.show();
+    }
 
-        findViewById(R.id.submit).setOnClickListener(i -> {
+    private void openQuitDialogSave() {
+        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+                CreateTimer.this);
+        quitDialog.setTitle(getResources().getString(R.string.SaveMess));
+        quitDialog.setPositiveButton(getResources().getString(R.string.Yes), (dialog, which) -> {
+            Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
+            int[] id = (int[])bundle.get("timerId");
+
+            if(id[1] == 1){
+                timerModel = db.timerDao().getById(id[0]);
+                initInputs(timerModel);
+            }
             if (id[1] != 1) {
                 TimerModel timerModel = new TimerModel();
                 timerModel.Name = inputName.getText().toString();
@@ -152,6 +185,10 @@ public class CreateTimer extends AppCompatActivity {
             startActivity(backIntent);
             finish();
         });
+        quitDialog.setNegativeButton(getResources().getString(R.string.No), (dialog, which) -> {
+            onBackPressed();
+        });
+        quitDialog.show();
     }
 
     private void initInputs(TimerModel timerModel){
