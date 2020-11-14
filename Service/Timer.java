@@ -19,19 +19,20 @@ public class Timer extends Service {
 
     ScheduledExecutorService service;
     SoundPool soundPool;
-    int soundIdPip;
-    int soundIdPipAlter;
+    int soundPrepair;
+    int soundFinal;
     int current_time;
+
     String name;
     ScheduledFuture<?> scheduledFuture;
 
     public void onCreate() {
         super.onCreate();
         soundPool = new SoundPool.Builder()
-                .setMaxStreams(5)
-                .build();
-        soundIdPip = soundPool.load(this, R.raw.censore_preview, 1);
-        soundIdPipAlter = soundPool.load(this, R.raw.shot, 1);
+                            .setMaxStreams(5)
+                            .build();
+        soundPrepair = soundPool.load(this, R.raw.censore_preview, 1);
+        soundFinal = soundPool.load(this, R.raw.final_sound, 1);
         service = Executors.newScheduledThreadPool(1);
     }
 
@@ -39,9 +40,9 @@ public class Timer extends Service {
         service.shutdownNow();
         scheduledFuture.cancel(true);
         Intent intent = new Intent(TrainingTimer.BROADCAST_ACTION);
-        intent.putExtra(TrainingTimer.PARAM_CURRENT_ACTION, "pause");
-        intent.putExtra(TrainingTimer.PARAM_NAME_ELEMENT, name);
-        intent.putExtra(TrainingTimer.PARAM_TIME_ELEMENT, Integer.toString(current_time));
+        intent.putExtra(TrainingTimer.CURRENT_ACTION, "pause");
+        intent.putExtra(TrainingTimer.NAME_ACTION, name);
+        intent.putExtra(TrainingTimer.TIME_ACTION, Integer.toString(current_time));
         sendBroadcast(intent);
         super.onDestroy();
 
@@ -50,8 +51,8 @@ public class Timer extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         int time = Integer.parseInt(intent.getStringExtra(TrainingTimer.PARAM_START_TIME));
-        name = intent.getStringExtra(TrainingTimer.PARAM_NAME_ELEMENT);
-        MyRun mr = new MyRun(startId, time, name);
+        name = intent.getStringExtra(TrainingTimer.NAME_ACTION);
+        MyTimerTask mr = new MyTimerTask(startId, time, name);
         if (scheduledFuture != null) {
             service.schedule(() -> {
                 scheduledFuture.cancel(true);
@@ -67,13 +68,13 @@ public class Timer extends Service {
         return null;
     }
 
-    class MyRun extends TimerTask {
+    class MyTimerTask extends TimerTask {
 
         int time;
         int startId;
         String name;
 
-        public MyRun(int startId, int time, String name) {
+        public MyTimerTask(int startId, int time, String name) {
             this.time = time;
             this.startId = startId;
             this.name = name;
@@ -83,43 +84,36 @@ public class Timer extends Service {
         public void run() {
             Intent intent = new Intent(TrainingTimer.BROADCAST_ACTION);
             if (name.equals(getResources().getString(R.string.Finish))) {
-                intent.putExtra(TrainingTimer.PARAM_CURRENT_ACTION, "work");
-                intent.putExtra(TrainingTimer.PARAM_NAME_ELEMENT, name);
-                intent.putExtra(TrainingTimer.PARAM_TIME_ELEMENT, "");
+                intent.putExtra(TrainingTimer.CURRENT_ACTION, "work");
+                intent.putExtra(TrainingTimer.NAME_ACTION, name);
+                intent.putExtra(TrainingTimer.TIME_ACTION, "");
                 sendBroadcast(intent);
             }
             try {
                 for (current_time = time; current_time > 0; current_time--) {
-                    intent.putExtra(TrainingTimer.PARAM_CURRENT_ACTION, "work");
-                    intent.putExtra(TrainingTimer.PARAM_NAME_ELEMENT, name);
-                    intent.putExtra(TrainingTimer.PARAM_TIME_ELEMENT, Integer.toString(current_time));
+                    intent.putExtra(TrainingTimer.CURRENT_ACTION, "work");
+                    intent.putExtra(TrainingTimer.NAME_ACTION, name);
+                    intent.putExtra(TrainingTimer.TIME_ACTION, Integer.toString(current_time));
                     sendBroadcast(intent);
                     TimeUnit.SECONDS.sleep(1);
-                    bip(current_time);
+                    signal_sound(current_time);
                 }
                 intent = new Intent(TrainingTimer.BROADCAST_ACTION);
-                intent.putExtra(TrainingTimer.PARAM_CURRENT_ACTION, "clear");
+                intent.putExtra(TrainingTimer.CURRENT_ACTION, "clear");
                 sendBroadcast(intent);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        void bip(int time) {
+        void signal_sound(int time) {
             if (time <= 4) {
                 if (time == 1)
-                    allertsignal();
+                    soundPool.play(soundFinal, 1, 1, 0, 0, 1);
                 else
-                    signal();
+                    soundPool.play(soundPrepair, 1, 1, 0, 0, 1);
             }
         }
 
-        void allertsignal() {
-            soundPool.play(soundIdPipAlter, 1, 1, 0, 0, 1);
-        }
-
-        void signal() {
-            soundPool.play(soundIdPip, 1, 1, 0, 0, 1);
-        }
     }
 }

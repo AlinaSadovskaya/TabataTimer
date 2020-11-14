@@ -18,6 +18,7 @@ import com.lab2.tabatatimer.DataBase.DataBaseHelper;
 import com.lab2.tabatatimer.Model.TimerModel;
 import com.lab2.tabatatimer.Service.Timer;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TrainingTimer extends AppCompatActivity {
 
@@ -32,9 +33,9 @@ public class TrainingTimer extends AppCompatActivity {
     ArrayAdapter<String> adapter;
 
     public final static String PARAM_START_TIME = "start_time";
-    public final static String PARAM_NAME_ELEMENT = "name";
-    public final static String PARAM_TIME_ELEMENT = "time";
-    public final static String PARAM_CURRENT_ACTION = "pause";
+    public final static String NAME_ACTION = "name";
+    public final static String TIME_ACTION = "time";
+    public final static String CURRENT_ACTION = "pause";
     public final static String BROADCAST_ACTION = "com.lab2.tabatatimer";
     int element = 0;
     boolean check_last_sec = false;
@@ -51,6 +52,7 @@ public class TrainingTimer extends AppCompatActivity {
         db = App.getInstance().getDatabase();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        assert bundle != null;
         int idT = (int)bundle.get("timerId");
         timerModel = db.timerDao().getById(idT);
 
@@ -61,9 +63,10 @@ public class TrainingTimer extends AppCompatActivity {
 
         receiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-                if (intent.getStringExtra(PARAM_CURRENT_ACTION).equals("work")) {
-                    String task = intent.getStringExtra(PARAM_NAME_ELEMENT);
-                    String status = intent.getStringExtra(PARAM_TIME_ELEMENT);
+                if (Objects.equals(intent.getStringExtra(CURRENT_ACTION), "work")) {
+                    String task = intent.getStringExtra(NAME_ACTION);
+                    String status = intent.getStringExtra(TIME_ACTION);
+                    assert status != null;
                     if (status.equals("1")) {
                         workLastSec();
                     } else {
@@ -71,11 +74,12 @@ public class TrainingTimer extends AppCompatActivity {
                     }
                     TrainingStep.setText(task);
                     TrainingTime.setText(status);
-                } else if (intent.getStringExtra(PARAM_CURRENT_ACTION).equals("clear")) {
+                } else if (Objects.equals(intent.getStringExtra(CURRENT_ACTION), "clear")) {
                     clear();
                 } else {
-                    value_status_pause = intent.getStringExtra(PARAM_NAME_ELEMENT);
-                    value_time_pause = intent.getStringExtra(PARAM_TIME_ELEMENT);
+                    value_status_pause = intent.getStringExtra(NAME_ACTION);
+                    value_time_pause = intent.getStringExtra(TIME_ACTION);
+                    assert value_time_pause != null;
                     startPause(value_time_pause);
                 }
 
@@ -138,7 +142,7 @@ public class TrainingTimer extends AppCompatActivity {
         element++;
         check_last_sec = true;
         if (element < adapter.getCount()) {
-            String[] words = adapter.getItem(element).split(" : ");
+            String[] words = Objects.requireNonNull(adapter.getItem(element)).split(" : ");
             if (words.length == 2)
                 AddNewService(words[1], "0");
             else
@@ -152,7 +156,7 @@ public class TrainingTimer extends AppCompatActivity {
                 element--;
             else
                 check_last_sec = false;
-            String[] words = adapter.getItem(element).split(" : ");
+            String[] words = Objects.requireNonNull(adapter.getItem(element)).split(" : ");
             value_status_pause = words[1];
         }
         value_element_pause = element;
@@ -193,7 +197,7 @@ public class TrainingTimer extends AppCompatActivity {
         element = position;
         view.setBackgroundColor(getResources().getColor(R.color.colorAccent,getTheme()));
         stopService(new Intent(this, Timer.class));
-        String[] words = adapter.getItem(position).split(" : ");
+        String[] words = Objects.requireNonNull(adapter.getItem(position)).split(" : ");
         if (words.length == 2) {
             startStop.setBackground(getResources().getDrawable(R.drawable.start_sign));
             startStop.setOnClickListener(this::onStartClick);
@@ -207,7 +211,7 @@ public class TrainingTimer extends AppCompatActivity {
 
     public void AddNewService(String name, String time) {
         startService(new Intent(this, Timer.class).putExtra(PARAM_START_TIME, time)
-                .putExtra(PARAM_NAME_ELEMENT, name));
+                .putExtra(NAME_ACTION, name));
     }
 
     public void onStartClick(View view) {
